@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
-import CustomInput from "./CustomInput";
-import CustomButton from "./CustomButton";
+import CustomInput from "../CustomInput";
+import CustomButton from "../CustomButton";
 
 const INPUT_LOGIN_FIELDS = [
   { name: "email", label: "Ingresa tu email", icon: "email" },
@@ -12,19 +12,19 @@ const INPUT_LOGIN_FIELDS = [
   },
 ];
 
-const onSubmit = () => {
-  try {
-    console.log("Login");
-    // navigation.replace('DrawerNavigator');
-  } catch (err) {
-    console.error(err);
-  }
-};
-
 const FormLogin = ({ children }) => {
+  const onSubmit = () => {
+    try {
+      console.log("Login");
+      // navigation.replace('DrawerNavigator');
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <View style={styles.form}>
-      <Text style={styles.title}>INICIA SESIÓN CON TU CUENTA</Text>
+      <Text style={styles.title}>Inicia sesión con tu email y contraseña:</Text>
       {INPUT_LOGIN_FIELDS.map(({ label, icon, secure }, index) => (
         <View key={`input-${index}`} style={styles.inputContainer}>
           <CustomInput label={label} icon={icon} secure={secure} />
@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: "DMSans-Regular",
     color: "#000000",
-    fontWeight: "bold",
   },
   inputContainer: {
     width: "100%",

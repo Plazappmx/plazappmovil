@@ -1,28 +1,28 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import FormLogin from "../components/form/FormLogin";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import RootLayout from "../components/layout/RootLayout";
+import FormForgotPassword from "../components/form/FormForgotPassword";
+import { useNavigation } from "@react-navigation/native";
 
-const LoginScreen = () => {
+const ForgotPasswordScreen = () => {
   const navigation = useNavigation();
 
   return (
     <RootLayout>
-      <FormLogin>
-        <View style={styles.forgotPassword}>
+      <FormForgotPassword>
+        <View style={styles.login}>
           <TouchableOpacity
             activeOpacity={0.7}
-            onPress={() => navigation.navigate("ForgotPassword")}
+            onPress={() => navigation.navigate("Login")}
           >
-            <Text style={styles.link}>¿Olvidaste tu contraseña?</Text>
+            <Text style={styles.link}>¿Quieres iniciar sesión?</Text>
           </TouchableOpacity>
         </View>
-      </FormLogin>
+      </FormForgotPassword>
     </RootLayout>
   );
 };
 
-export default LoginScreen;
+export default ForgotPasswordScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  forgotPassword: {
+  login: {
     flexDirection: "row",
     gap: 4,
   },
