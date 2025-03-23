@@ -1,7 +1,7 @@
 import { StyleSheet, TextInput, View } from "react-native";
 import { Icon } from "react-native-paper";
 
-const CustomInput = ({ label, icon, secure = false }) => {
+const CustomInput = ({ label, value, onChange, icon, secure = false }) => {
   return (
     <View style={styles.inputContainer}>
       <View style={styles.prepend}>
@@ -12,6 +12,8 @@ const CustomInput = ({ label, icon, secure = false }) => {
         placeholder={label}
         placeholderTextColor="#25292E"
         secureTextEntry={secure}
+        value={value}
+        onChangeText={onChange}
       />
     </View>
   );

@@ -1,21 +1,25 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Icon } from "react-native-paper";
+import useAuthContext from "../../hooks/useAuthContext";
+import { logout } from "../../services/authService";
 
 const Navbar = () => {
+  const { loggedUser } = useAuthContext();
   const navigation = useNavigation();
 
   return (
     <View style={styles.navBar}>
-      <Text style={styles.logo}>PlAZAPP</Text>
+      <Text style={styles.logo}>PLAZAPP</Text>
       <Pressable
-        // onPress={() => {
-        //   navigation.navigate("Profile");
-        // }}
+        onPress={async () => {
+          await logout();
+          navigation.navigate("Login");
+        }}
         style={styles.profile}
       >
-        <Text style={styles.email}>Perfil</Text>
-        <Icon source="account" size={20} />
+        <Text style={styles.email}>{loggedUser?.email}</Text>
+        <Icon source="account" color="#4866f0" size={24} />
       </Pressable>
     </View>
   );
@@ -31,8 +35,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   logo: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
+    color: "#4866f0",
   },
   profile: {
     flexDirection: "row",
@@ -41,7 +46,8 @@ const styles = StyleSheet.create({
   },
   email: {
     fontSize: 20,
-    fontWeight: "600",
+    fontWeight: "500",
+    color: "#4866f0",
   },
 });
 
