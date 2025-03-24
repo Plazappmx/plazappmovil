@@ -19,7 +19,7 @@ const Navbar = () => {
         style={styles.profile}
       >
         <Text style={styles.email}>{loggedUser?.email}</Text>
-        <Icon source="account" color="#4866f0" size={24} />
+        <Icon source="account" color="#334cbb" size={24} />
       </Pressable>
     </View>
   );
@@ -32,12 +32,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 24,
   },
   logo: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#4866f0",
+    color: "#334cbb",
   },
   profile: {
     flexDirection: "row",
@@ -47,7 +46,7 @@ const styles = StyleSheet.create({
   email: {
     fontSize: 20,
     fontWeight: "500",
-    color: "#4866f0",
+    color: "#334cbb",
   },
 });
 

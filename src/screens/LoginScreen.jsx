@@ -1,13 +1,13 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FormLogin from "../components/form/FormLogin";
-import RootLayout from "../components/layout/RootLayout";
+import PublicLayout from "../components/layout/PublicLayout";
 
 const LoginScreen = () => {
   const navigation = useNavigation();
 
   return (
-    <RootLayout>
+    <PublicLayout>
       <FormLogin>
         <View style={styles.forgotPassword}>
           <TouchableOpacity
@@ -18,7 +18,7 @@ const LoginScreen = () => {
           </TouchableOpacity>
         </View>
       </FormLogin>
-    </RootLayout>
+    </PublicLayout>
   );
 };
 

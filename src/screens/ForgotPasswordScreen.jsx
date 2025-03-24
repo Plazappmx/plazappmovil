@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import RootLayout from "../components/layout/RootLayout";
+import PublicLayout from "../components/layout/PublicLayout";
 import FormForgotPassword from "../components/form/FormForgotPassword";
 import { useNavigation } from "@react-navigation/native";
 
@@ -7,7 +7,7 @@ const ForgotPasswordScreen = () => {
   const navigation = useNavigation();
 
   return (
-    <RootLayout>
+    <PublicLayout>
       <FormForgotPassword>
         <View style={styles.login}>
           <TouchableOpacity
@@ -18,7 +18,7 @@ const ForgotPasswordScreen = () => {
           </TouchableOpacity>
         </View>
       </FormForgotPassword>
-    </RootLayout>
+    </PublicLayout>
   );
 };
 

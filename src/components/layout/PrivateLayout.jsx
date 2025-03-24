@@ -13,11 +13,11 @@ const PrivateLayout = ({ children }) => {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
+    paddingHorizontal: 18,
   },
   container: {
     gap: 16,
     width: "100%",
-    paddingHorizontal: 24,
   },
 });
 
