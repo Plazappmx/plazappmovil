@@ -3,7 +3,7 @@ import useAuthContext from "../../hooks/useAuthContext";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
 
-const RootLayout = ({ children }) => {
+const PublicLayout = ({ children }) => {
   const { isAuth } = useAuthContext();
   const navigation = useNavigation();
 
@@ -23,7 +23,7 @@ const RootLayout = ({ children }) => {
   );
 };
 
-export default RootLayout;
+export default PublicLayout;
 
 const styles = StyleSheet.create({
   main: {
