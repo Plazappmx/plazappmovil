@@ -1,12 +1,18 @@
 import { StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import CustomInput from "../CustomInput";
 import CustomButton from "../CustomButton";
+import { resetPassword } from "../../services/authService";
 
 const FormForgotPassword = ({ children }) => {
-  const onSubmit = () => {
+  const [email, setEmail] = useState("");
+  const navigation = useNavigation();
+
+  const onSubmit = async () => {
     try {
-      console.log("Reset password");
-      // navigation.replace('DrawerNavigator');
+      await resetPassword({ email });
+      navigation.replace("Login");
     } catch (err) {
       console.error(err);
     }
@@ -19,7 +25,12 @@ const FormForgotPassword = ({ children }) => {
         restablecer tu contraseña:
       </Text>
       <View style={styles.inputContainer}>
-        <CustomInput label="Email" icon="email" />
+        <CustomInput
+          label="Email"
+          value={email}
+          onChange={setEmail}
+          icon="email"
+        />
       </View>
       <CustomButton label="Restablecer contraseña" onPress={onSubmit} />
       {children}

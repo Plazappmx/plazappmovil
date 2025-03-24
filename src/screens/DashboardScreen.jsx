@@ -1,4 +1,4 @@
-import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import PrivateLayout from "../components/layout/PrivateLayout";
 import useAuthContext from "../hooks/useAuthContext";
 import { getOneStore } from "../services/plazasService";
