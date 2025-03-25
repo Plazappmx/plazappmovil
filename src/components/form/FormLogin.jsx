@@ -32,7 +32,7 @@ const FormLogin = ({ children }) => {
     try {
       const res = await signIn({ email, password });
       if (res) {
-        navigation.replace("Dashboard");
+        navigation.replace("Private");
       }
     } catch (err) {
       console.error(err);

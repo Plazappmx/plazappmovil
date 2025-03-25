@@ -9,7 +9,7 @@ const PublicLayout = ({ children }) => {
 
   useEffect(() => {
     if (isAuth) {
-      navigation.navigate("Dashboard");
+      navigation.navigate("Private");
     }
   }, [isAuth]);
 
@@ -28,6 +28,7 @@ export default PublicLayout;
 const styles = StyleSheet.create({
   main: {
     flex: 1,
+    backgroundColor: "#F3F3F3",
   },
   logo: {
     fontSize: 32,

@@ -1,42 +1,11 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import PrivateLayout from "../components/layout/PrivateLayout";
-import useAuthContext from "../hooks/useAuthContext";
-import { getOneStore } from "../services/plazasService";
-import { useEffect } from "react";
 import usePlazasContext from "../hooks/usePlazasContext";
 import useUsersContext from "../hooks/useUsersContext";
-import { getOneUser } from "../services/userServices";
 
 const DashboardScreen = () => {
-  const { isAuth, loggedUser } = useAuthContext();
-  const { store, setStore } = usePlazasContext();
-  const { userTenant, setUserTenant } = useUsersContext();
-
-  const fetchStore = async () => {
-    const res = await getOneStore(loggedUser?.storeId);
-    setStore(res);
-  };
-
-  const fetchUserTenant = async () => {
-    if (store?.tenantId) {
-      const res = await getOneUser(store.tenantId);
-      setUserTenant(res);
-    } else {
-      setUserTenant({});
-    }
-  };
-
-  useEffect(() => {
-    if (isAuth) {
-      if (loggedUser?.storeId) {
-        fetchStore();
-      }
-
-      if (store.tenantId) {
-        fetchUserTenant();
-      }
-    }
-  }, [loggedUser?.storeId, store.tenantId]);
+  const { store } = usePlazasContext();
+  const { userTenant } = useUsersContext();
 
   const TENANT_INFO = [
     { label: "Nombre", value: userTenant?.name },
@@ -116,7 +85,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#F3F3F3",
     zIndex: 10,
     paddingHorizontal: 8,
   },
