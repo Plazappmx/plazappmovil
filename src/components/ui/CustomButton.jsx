@@ -1,11 +1,11 @@
 import { StyleSheet } from "react-native";
 import { Button } from "react-native-paper";
 
-const CustomButton = ({ label, width, onPress }) => {
+const CustomButton = ({ label, width, color = "#4866f0", onPress }) => {
   return (
     <Button
       mode="elevated"
-      buttonColor="#4866f0"
+      buttonColor={color}
       textColor="#fff"
       style={[styles.button, { width: width ?? "100%" }]}
       contentStyle={styles.buttonContent}

@@ -20,6 +20,9 @@ const ProfileScreen = () => {
         </View>
       </View>
       <Divider />
+      {!loggedUser?.passwordChanged ? (
+        <Text style={styles.warnMsg}>Actualiza tu contraseña</Text>
+      ) : null}
       <FormPassword loggedUser={loggedUser} />
       <Divider />
       <Button
@@ -61,6 +64,18 @@ const styles = StyleSheet.create({
   email: {
     flexDirection: "row",
     gap: 6,
+  },
+  warnMsg: {
+    marginTop: 20,
+    borderColor: "#dc3545",
+    borderStyle: "solid",
+    borderWidth: 2,
+    borderRadius: 8,
+    padding: 12,
+    textAlign: "center",
+    color: "#dc3545",
+    fontSize: 18,
+    fontWeight: "bold",
   },
   formTitle: {
     fontSize: 20,

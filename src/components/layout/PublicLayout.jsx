@@ -14,10 +14,12 @@ const PublicLayout = ({ children }) => {
       return;
     }
 
-    (async () => {
-      await logout();
-    })();
-    console.log("Sesión terminada");
+    if (!loggedUser?.role === "tenant") {
+      (async () => {
+        await logout();
+      })();
+      console.log("Sesión terminada");
+    }
   }, [isAuth]);
 
   return (
