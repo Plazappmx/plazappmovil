@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import CustomInput from "../ui/CustomInput";
 import CustomButton from "../ui/CustomButton";
 import { signIn } from "../../services/authService";
 
 const FormLogin = ({ children }) => {
-  const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 

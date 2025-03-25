@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import Navbar from "./Navbar";
 import useAuthContext from "../../hooks/useAuthContext";
@@ -5,7 +6,6 @@ import usePlazasContext from "../../hooks/usePlazasContext";
 import useUsersContext from "../../hooks/useUsersContext";
 import { getOneStore } from "../../services/plazasService";
 import { getOneUser } from "../../services/userServices";
-import { useEffect } from "react";
 
 const PrivateLayout = ({ children }) => {
   const { isAuth, loggedUser } = useAuthContext();

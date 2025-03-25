@@ -2,7 +2,6 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Icon } from "react-native-paper";
 import useAuthContext from "../../hooks/useAuthContext";
-import { logout } from "../../services/authService";
 
 const Navbar = () => {
   const { loggedUser } = useAuthContext();
@@ -12,10 +11,7 @@ const Navbar = () => {
     <View style={styles.navBar}>
       <Text style={styles.logo}>PLAZAPP</Text>
       <Pressable
-        onPress={async () => {
-          await logout();
-          navigation.navigate("Login");
-        }}
+        onPress={async () => navigation.navigate("Perfil")}
         style={styles.profile}
       >
         <Text style={styles.email}>{loggedUser?.email}</Text>

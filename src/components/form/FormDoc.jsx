@@ -16,7 +16,7 @@ const FormDoc = ({ userId, getDocs, hideModal }) => {
   const [docName, setDocName] = useState("");
   const [file, setFile] = useState(null);
 
-  const INPUT_LOGIN_FIELDS = [
+  const INPUT_DOCS_FIELDS = [
     {
       name: "docType",
       value: docType,
@@ -62,7 +62,7 @@ const FormDoc = ({ userId, getDocs, hideModal }) => {
   return (
     <View style={styles.form}>
       <Text style={styles.title}>Subir Documento</Text>
-      {INPUT_LOGIN_FIELDS.map(
+      {INPUT_DOCS_FIELDS.map(
         ({ name, label, value, options, onChange }, index) => {
           const selectOptions = options
             ? options
