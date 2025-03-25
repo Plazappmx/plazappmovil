@@ -14,6 +14,7 @@ import useUsersContext from "../hooks/useUsersContext";
 import { getDocumentsByUserAndSubcollection } from "../services/documentServices";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import DocsGrid from "../components/ui/DocsGrid";
+import CustomModal from "../components/layout/CustomModal";
 
 const DocumentsScreen = () => {
   const { store } = usePlazasContext();
@@ -109,16 +110,9 @@ const DocumentsScreen = () => {
             Subir Documento
           </Button>
 
-          <Portal>
-            <Modal
-              visible={visible}
-              onDismiss={hideModal}
-              contentContainerStyle={styles.modalContainer}
-              style={{ padding: 16 }}
-            >
-              <Text>Subir Documento</Text>
-            </Modal>
-          </Portal>
+          <CustomModal visible={visible} hideModal={hideModal}>
+            <Text>Subir Documento</Text>
+          </CustomModal>
         </View>
       </View>
       <View style={styles.container}>
@@ -173,5 +167,4 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "500",
   },
-  modalContainer: { backgroundColor: "white", padding: 20 },
 });

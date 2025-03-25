@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import CustomInput from "../CustomInput";
-import CustomButton from "../CustomButton";
+import CustomInput from "../ui/CustomInput";
+import CustomButton from "../ui/CustomButton";
 import { resetPassword } from "../../services/authService";
 
 const FormForgotPassword = ({ children }) => {

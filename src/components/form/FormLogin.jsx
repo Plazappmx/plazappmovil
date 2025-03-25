@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
-import CustomInput from "../CustomInput";
-import CustomButton from "../CustomButton";
+import CustomInput from "../ui/CustomInput";
+import CustomButton from "../ui/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { signIn } from "../../services/authService";
