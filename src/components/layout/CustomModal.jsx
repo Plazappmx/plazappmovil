@@ -20,7 +20,8 @@ export default CustomModal;
 
 const styles = StyleSheet.create({
   modalContainer: {
-    backgroundColor: "white",
+    backgroundColor: "#f3f3f3",
     adding: 20,
+    borderRadius: 8,
   },
 });

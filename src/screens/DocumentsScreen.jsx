@@ -1,20 +1,14 @@
-import {
-  FlatList,
-  ScrollView,
-  StyleSheet,
-  Text,
-  useWindowDimensions,
-  View,
-} from "react-native";
-import PrivateLayout from "../components/layout/PrivateLayout";
-import usePlazasContext from "../hooks/usePlazasContext";
-import { Button, Modal, Portal } from "react-native-paper";
 import { useEffect, useState } from "react";
-import useUsersContext from "../hooks/useUsersContext";
-import { getDocumentsByUserAndSubcollection } from "../services/documentServices";
+import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
+import { Button } from "react-native-paper";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
+import PrivateLayout from "../components/layout/PrivateLayout";
 import DocsGrid from "../components/ui/DocsGrid";
 import CustomModal from "../components/layout/CustomModal";
+import FormDoc from "../components/form/FormDoc";
+import usePlazasContext from "../hooks/usePlazasContext";
+import useUsersContext from "../hooks/useUsersContext";
+import { getDocumentsByUserAndSubcollection } from "../services/documentServices";
 
 const DocumentsScreen = () => {
   const { store } = usePlazasContext();
@@ -111,7 +105,11 @@ const DocumentsScreen = () => {
           </Button>
 
           <CustomModal visible={visible} hideModal={hideModal}>
-            <Text>Subir Documento</Text>
+            <FormDoc
+              userId={userTenant?.id}
+              getDocs={getDocs}
+              hideModal={hideModal}
+            />
           </CustomModal>
         </View>
       </View>

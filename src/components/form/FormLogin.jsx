@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     textAlign: "center",
     fontSize: 18,
-    fontFamily: "DMSans-Regular",
     color: "#000000",
   },
   inputContainer: {
