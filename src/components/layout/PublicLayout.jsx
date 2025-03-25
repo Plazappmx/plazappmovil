@@ -2,14 +2,21 @@ import { StyleSheet, Text, View } from "react-native";
 import useAuthContext from "../../hooks/useAuthContext";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
+import { logout } from "../../services/authService";
 
 const PublicLayout = ({ children }) => {
-  const { isAuth } = useAuthContext();
+  const { isAuth, loggedUser } = useAuthContext();
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (isAuth) {
+    if (isAuth && loggedUser?.role === "tenant") {
       navigation.navigate("Private");
+    } else {
+      (async () => {
+        await logout();
+        navigation.navigate("Login");
+      })();
+      console.log("Sesión terminada");
     }
   }, [isAuth]);
 
