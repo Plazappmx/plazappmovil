@@ -1,8 +1,8 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { logout } from "../services/authService";
 import useAuthContext from "../hooks/useAuthContext";
-import { Button, Divider, Icon } from "react-native-paper";
+import { Button, Divider, Icon, IconButton } from "react-native-paper";
 import FormPassword from "../components/form/FormPassword";
 
 const ProfileScreen = () => {
@@ -11,7 +11,14 @@ const ProfileScreen = () => {
 
   return (
     <View style={styles.main}>
-      <Text style={styles.title}>Mi Perfil</Text>
+      <View style={styles.titleContainer}>
+        <IconButton
+          icon="arrow-left"
+          containerColor="#e0e4f7"
+          onPress={() => navigation.goBack()}
+        />
+        <Text style={styles.title}>Mi Perfil</Text>
+      </View>
       <View>
         <Text style={styles.subTitle}>{loggedUser?.name}</Text>
         <View style={styles.email}>
@@ -50,6 +57,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#F3F3F3",
     gap: 24,
     width: "100%",
+  },
+  titleContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
   },
   title: {
     fontSize: 24,
