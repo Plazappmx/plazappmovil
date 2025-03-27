@@ -9,14 +9,17 @@ import FormDoc from "../components/form/FormDoc";
 import usePlazasContext from "../hooks/usePlazasContext";
 import useUsersContext from "../hooks/useUsersContext";
 import { getDocumentsByUserAndSubcollection } from "../services/documentServices";
+import useAuthContext from "../hooks/useAuthContext";
 
 const DocumentsScreen = () => {
+  const { loggedUser } = useAuthContext();
   const { store } = usePlazasContext();
   const { userTenant } = useUsersContext();
   const [visible, setVisible] = useState(false);
   const [docs, setDocs] = useState([]);
   const [index, setIndex] = useState(0);
   const [routes] = useState([
+    { key: "lessor", title: "Arrendador" },
     { key: "general", title: "General" },
     { key: "invoices", title: "Facturas" },
     {
@@ -38,11 +41,14 @@ const DocumentsScreen = () => {
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
 
+  const userId =
+    routes[index].key === "lessor" ? loggedUser?.adminId : userTenant?.id;
+
   const getDocs = async () => {
     setIsLoading(true);
-    if (userTenant?.id) {
+    if (userId) {
       const data = await getDocumentsByUserAndSubcollection(
-        userTenant?.id,
+        userId,
         routes[index].key
       );
       setDocs(data?.docs);
@@ -75,6 +81,7 @@ const DocumentsScreen = () => {
     );
 
   const renderScene = SceneMap({
+    lessor: renderComponent,
     general: renderComponent,
     invoices: renderComponent,
     paymentReceipts: renderComponent,

@@ -30,6 +30,7 @@ const DocsGrid = ({ userId, docs, docType, getDocs }) => {
               iconColor="#fff"
               icon="delete"
               onPress={() => handleDeleteDoc(item.id)}
+              disabled={docType === "lessor"}
             />
           </View>
         </View>
