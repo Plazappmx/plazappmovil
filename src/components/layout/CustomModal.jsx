@@ -1,5 +1,5 @@
-import { StyleSheet, Text } from "react-native";
-import { Modal, Portal } from "react-native-paper";
+import { ScrollView, StyleSheet } from "react-native";
+import { IconButton, Modal, Portal } from "react-native-paper";
 
 const CustomModal = ({ visible, hideModal, children }) => {
   return (
@@ -10,7 +10,15 @@ const CustomModal = ({ visible, hideModal, children }) => {
         contentContainerStyle={styles.modalContainer}
         style={{ padding: 16 }}
       >
-        {children}
+        <IconButton
+          iconColor="#808080"
+          icon="close"
+          onPress={hideModal}
+          style={{ alignSelf: "flex-end" }}
+        />
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          {children}
+        </ScrollView>
       </Modal>
     </Portal>
   );
@@ -21,7 +29,7 @@ export default CustomModal;
 const styles = StyleSheet.create({
   modalContainer: {
     backgroundColor: "#f3f3f3",
-    adding: 20,
+    padding: 20,
     borderRadius: 8,
   },
 });

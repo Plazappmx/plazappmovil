@@ -204,3 +204,107 @@ export const toggleAllowDeleteDocType = async ({ userId, docType }) => {
     console.error("Error manipulando el campo allowDeleteDocs:", error);
   }
 };
+
+export const analyzeDocument = async (base64) => {
+  try {
+    console.log("Analizando documento...");
+    const response = await fetch(
+      `https://vision.googleapis.com/v1/images:annotate?key=${process.env.EXPO_PUBLIC_GOOGLE_VISION_API_KEY}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          requests: [
+            {
+              image: {
+                content: base64,
+              },
+              features: [{ type: "TEXT_DETECTION" }],
+            },
+          ],
+        }),
+      }
+    );
+
+    const result = await response.json();
+    const fullText = result?.responses?.[0]?.fullTextAnnotation?.text;
+
+    if (fullText) {
+      const curpMatch = fullText?.match(
+        /[A-Z]{4}\d{6}[HM][A-Z]{2}[A-Z]{3}[0-9A-Z]\d/
+      );
+      const curp = curpMatch ? curpMatch[0] : null;
+
+      // Nombres, apellidos y fecha de nacimiento
+      const lines = fullText.split("\n").map((line) => line.trim());
+
+      let names = null;
+      let paternalSurname = null;
+      let maternalSurname = null;
+      let birthDate = null;
+
+      // Fecha de nacimiento (formato dd/mm/aaaa o dd-mm-aaaa o similar)
+      // const birthDateMatch = fullText.match(/(\d{2}[-\/]\d{2}[-\/]\d{4})/);
+      // const birthDate = birthDateMatch ? birthDateMatch[0] : null;
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].toUpperCase();
+
+        if (
+          line.includes("NOMBRE") ||
+          line.includes("NOMBRES") ||
+          line.includes("NOMBRE(S)")
+        ) {
+          names = lines[i + 1]?.trim();
+          // Si el nombre viene junto con los apellidos línea por línea
+          // names = `${lines[i + 3]?.trim()} ${lines[i + 1]?.trim()} ${lines[i + 2]?.trim()}`;
+        }
+
+        if (line.includes("APELLIDO PATERNO")) {
+          paternalSurname = lines[i + 1]?.trim();
+        }
+
+        if (line.includes("APELLIDO MATERNO")) {
+          maternalSurname = lines[i + 1]?.trim();
+        }
+
+        // Si está todo en una sola línea
+        const matchFullName = line.match(/NOMBRE(?:S)?[:\s]+([A-Z\s]+)/);
+        if (matchFullName) {
+          const fullNameParts = matchFullName[1].trim().split(/\s+/);
+          if (fullNameParts.length >= 3) {
+            paternalSurname = fullNameParts[0];
+            maternalSurname = fullNameParts[1];
+            names = fullNameParts.slice(2).join(" ");
+          }
+        }
+
+        if (line.includes("NACIMIENTO")) {
+          const birthDateMatch =
+            lines[i].match(/\d{2}[-\/]\d{2}[-\/]\d{4}/) ||
+            lines[i + 1]?.match(/\d{2}[-\/]\d{2}[-\/]\d{4}/);
+          if (birthDateMatch) {
+            birthDate = birthDateMatch[0];
+            break;
+          }
+        }
+      }
+
+      const data = {
+        curp,
+        names,
+        paternalSurname,
+        maternalSurname,
+        birthDate,
+      };
+
+      return { data, fullText };
+    }
+
+    console.log("El documento no contiene la información solicitada");
+  } catch (error) {
+    console.error("❌ Error al analizar el documento:", error);
+  }
+};

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import { IconButton } from "react-native-paper";
 import { Picker } from "@react-native-picker/picker";
 import * as DocumentPicker from "expo-document-picker";
@@ -9,12 +9,23 @@ import {
   GENERAL_DOCS_OPTIONS,
   MONTHLY_DOCS_OPTIONS,
 } from "../../utils/consts";
-import { uploadDocument } from "../../services/documentServices";
+import {
+  analyzeDocument,
+  uploadDocument,
+} from "../../services/documentServices";
+import { addContactInfo } from "../../services/userServices";
 
-const FormDoc = ({ userId, getDocs, hideModal }) => {
+const FormDoc = ({ photo, setPhoto, userId, getDocs, hideModal, openCamera }) => {
   const [docType, setDocType] = useState("");
   const [docName, setDocName] = useState("");
   const [file, setFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (photo) {
+      setFile(null)
+    }
+  }, [photo])
 
   const INPUT_DOCS_FIELDS = [
     {
@@ -44,20 +55,82 @@ const FormDoc = ({ userId, getDocs, hideModal }) => {
       }
 
       setFile(result.assets[0]);
+      setPhoto(null)
     } catch (error) {
       console.error("Error seleccionando documento:", error);
     }
   };
 
-  const onSubmit = async () => {
+  const submitUploadedDoc = async () => {
+    setIsLoading(true);
     try {
       await uploadDocument({ userId, file, docName, docType });
       await getDocs();
       hideModal();
     } catch (error) {
       console.error(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  const submitPhoto = async () => {
+    setIsLoading(true);
+    try {
+      const filePhoto = {
+        uri: photo?.uri,
+        mimeType: "image/jpeg",
+        name: "camera-photo.jpg",
+      };
+
+      const { data } = (await analyzeDocument(photo?.base64)) ?? {};
+      if (docName === "Documento 1") {
+        if (!data?.curp) {
+          return Alert.alert("No fue posible extraer el CURP", "", [
+            {
+              text: "Aceptar",
+            },
+          ]);
+        }
+
+        // if (!data?.names) {
+        //   return Alert.alert("No fue posible extraer el nombre", "", [
+        //     {
+        //       text: "Aceptar",
+        //     },
+        //   ]);
+        // }
+      }
+
+      await uploadDocument({
+        userId,
+        file: filePhoto,
+        docName,
+        docType,
+      });
+      await getDocs();
+      hideModal();
+
+      if (docName === "Documento 1") {
+        await addContactInfo({ 
+          CURP: data?.curp, 
+          // name: data?.names
+        }, userId);
+      }
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onSubmit = photo
+    ? submitPhoto
+    : submitUploadedDoc;
+
+  const btnDisabled = photo
+    ? Boolean(!photo?.uri || !docType || !docName)
+    : Boolean(!file || !docType || !docName);
 
   return (
     <View style={styles.form}>
@@ -94,6 +167,7 @@ const FormDoc = ({ userId, getDocs, hideModal }) => {
           );
         }
       )}
+
       <View style={styles.docPicker}>
         <IconButton
           mode="contained"
@@ -102,11 +176,41 @@ const FormDoc = ({ userId, getDocs, hideModal }) => {
           icon="upload"
           onPress={pickDocument}
         />
-        <Text style={styles.docPickerLabel}>
-          {file ? file?.name : "Cargar documento"}
-        </Text>
+        <Text style={styles.docPickerLabel}>Cargar documento</Text>
+        {file ? (
+          <Text
+            style={{ color: "#808080", fontWeight: 500, fontStyle: "italic" }}
+          >
+            {file?.name}
+          </Text>
+        ) : null}
       </View>
-      <CustomButton label="Subir" onPress={onSubmit} />
+
+      <Text style={{ marginTop: 12 }}>También puedes:</Text>
+
+      <View style={styles.docPicker}>
+        <IconButton
+          mode="contained"
+          containerColor="#606060"
+          iconColor="#fff"
+          icon="camera"
+          onPress={openCamera}
+        />
+        <Text style={styles.docPickerLabel}>Tomar foto</Text>
+        {photo ? (
+          <Text
+            style={{ color: "#808080", fontWeight: 500, fontStyle: "italic" }}
+          >
+            camera-photo.jpg
+          </Text>
+        ) : null}
+      </View>
+
+      <CustomButton
+        label={isLoading ? "Enviando ..." :"Enviar"}
+        onPress={isLoading ? () => null : onSubmit}
+        disabled={btnDisabled}
+      />
     </View>
   );
 };

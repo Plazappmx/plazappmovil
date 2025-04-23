@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
+import {
+  Modal,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import { Button } from "react-native-paper";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import PrivateLayout from "../components/layout/PrivateLayout";
@@ -10,6 +16,7 @@ import usePlazasContext from "../hooks/usePlazasContext";
 import useUsersContext from "../hooks/useUsersContext";
 import { getDocumentsByUserAndSubcollection } from "../services/documentServices";
 import useAuthContext from "../hooks/useAuthContext";
+import CameraCapture from "../components/ui/CameraCapture";
 
 const DocumentsScreen = () => {
   const { loggedUser } = useAuthContext();
@@ -36,10 +43,18 @@ const DocumentsScreen = () => {
     },
   ]);
   const [isLoading, setIsLoading] = useState(false);
+  const [cameraVisible, setCameraVisible] = useState(false);
+  const [photo, setPhoto] = useState(null);
   const layout = useWindowDimensions();
 
   const showModal = () => setVisible(true);
-  const hideModal = () => setVisible(false);
+  const hideModal = () => {
+    setVisible(false);
+    setPhoto(null);
+  };
+
+  const openCamera = () => setCameraVisible(true);
+  const closeCamera = () => setCameraVisible(false);
 
   const userId =
     routes[index].key === "lessor" ? loggedUser?.adminId : userTenant?.id;
@@ -107,15 +122,34 @@ const DocumentsScreen = () => {
           }}
         >
           <Text style={styles.subTitle}>{store?.name}</Text>
-          <Button textColor="#4866f0" onPress={showModal}>
-            Subir Documento
-          </Button>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              gap: 6,
+              alignItems: "center",
+            }}
+          >
+            <Button
+              mode="contained"
+              buttonColor="#e4e4e4"
+              textColor="#4866f0"
+              onPress={showModal}
+              style={{ borderRadius: 12 }}
+            >
+              Subir documento
+            </Button>
+          </View>
 
           <CustomModal visible={visible} hideModal={hideModal}>
             <FormDoc
+              photo={photo}
+              setPhoto={setPhoto}
               userId={userTenant?.id}
               getDocs={getDocs}
               hideModal={hideModal}
+              openCamera={openCamera}
             />
           </CustomModal>
         </View>
@@ -139,6 +173,13 @@ const DocumentsScreen = () => {
           style={{ paddingTop: 120 }}
         />
       </View>
+
+      <Modal visible={cameraVisible} animationType="slide">
+        <CameraCapture
+          setPhoto={setPhoto}
+          onClose={closeCamera}
+        />
+      </Modal>
     </PrivateLayout>
   );
 };
@@ -168,7 +209,6 @@ const styles = StyleSheet.create({
     minHeight: "100%",
   },
   subTitle: {
-    marginBottom: 12,
     fontSize: 20,
     fontWeight: "500",
   },
