@@ -169,42 +169,6 @@ export const deleteDocumentAndFile = async ({ userId, docType, docId }) => {
   }
 };
 
-export const toggleAllowDeleteDocType = async ({ userId, docType }) => {
-  try {
-    const documentsCollectionRef = collection(db, "documents");
-
-    const q = query(documentsCollectionRef, where("userId", "==", userId));
-    const querySnapshot = await getDocs(q);
-
-    if (querySnapshot.empty) {
-      console.error(
-        `No se encontró ningún documento para el usuario con ID: ${userId}`
-      );
-      return;
-    }
-
-    const docRef = querySnapshot.docs[0].ref;
-    const docData = querySnapshot.docs[0].data();
-    const allowDeleteDocs = docData.allowDeleteDocs || [];
-
-    const isDocTypePresent = allowDeleteDocs.includes(docType);
-
-    await updateDoc(docRef, {
-      allowDeleteDocs: isDocTypePresent
-        ? arrayRemove(docType)
-        : arrayUnion(docType),
-    });
-
-    console.log(
-      `El docType: ${docType} ha sido ${
-        isDocTypePresent ? "eliminado de" : "agregado a"
-      } allowDeleteDocs.`
-    );
-  } catch (error) {
-    console.error("Error manipulando el campo allowDeleteDocs:", error);
-  }
-};
-
 export const analyzeDocument = async (base64) => {
   try {
     console.log("Analizando documento...");

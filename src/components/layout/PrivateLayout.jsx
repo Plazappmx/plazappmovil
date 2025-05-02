@@ -23,7 +23,7 @@ const PrivateLayout = ({ children }) => {
 
   const fetchUserTenant = async () => {
     if (store?.tenantId) {
-      const res = await getOneUser(store.tenantId);
+      const res = await getOneUser(store?.tenantId);
       setUserTenant(res);
     } else {
       setUserTenant({});
@@ -36,11 +36,11 @@ const PrivateLayout = ({ children }) => {
         fetchStore();
       }
 
-      if (store.tenantId) {
+      if (store?.tenantId) {
         fetchUserTenant();
       }
     }
-  }, [loggedUser?.storeId, store.tenantId]);
+  }, [loggedUser?.storeId, store?.tenantId]);
 
   useEffect(() => {
     if (!loggedUser?.termsAccepted) {
