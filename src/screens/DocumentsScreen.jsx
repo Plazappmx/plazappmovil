@@ -24,6 +24,7 @@ const DocumentsScreen = () => {
   const { userTenant } = useUsersContext();
   const [visible, setVisible] = useState(false);
   const [docs, setDocs] = useState([]);
+  const [allowDeleteDocs, setAllowDeleteDocs] = useState([]);
   const [index, setIndex] = useState(0);
   const [routes] = useState([
     { key: "lessor", title: "Arrendador" },
@@ -56,6 +57,9 @@ const DocumentsScreen = () => {
   const openCamera = () => setCameraVisible(true);
   const closeCamera = () => setCameraVisible(false);
 
+  const allowDelete = allowDeleteDocs?.includes(routes[index].key);
+  const isTenant = loggedUser && loggedUser?.role === "tenant";
+
   const userId =
     routes[index].key === "lessor" ? loggedUser?.adminId : userTenant?.id;
 
@@ -67,6 +71,7 @@ const DocumentsScreen = () => {
         routes[index].key
       );
       setDocs(data?.docs);
+      setAllowDeleteDocs(data?.allowDeleteDocs);
     }
     setIsLoading(false);
   };
@@ -82,6 +87,7 @@ const DocumentsScreen = () => {
           userId={userTenant?.id}
           docs={docs}
           docType={routes[index].key}
+          allowDelete={allowDelete || !isTenant}
           getDocs={getDocs}
         />
       ) : (
@@ -175,10 +181,7 @@ const DocumentsScreen = () => {
       </View>
 
       <Modal visible={cameraVisible} animationType="slide">
-        <CameraCapture
-          setPhoto={setPhoto}
-          onClose={closeCamera}
-        />
+        <CameraCapture setPhoto={setPhoto} onClose={closeCamera} />
       </Modal>
     </PrivateLayout>
   );

@@ -27,12 +27,12 @@ export const DOC_TYPES = [
 
 export const GENERAL_DOCS_OPTIONS = [
   {
-    value: "Documento 1",
-    label: "Documento 1",
+    value: "lessorId",
+    label: "Identificación Arrendatario",
   },
   {
-    value: "Documento 2",
-    label: "Documento 2",
+    value: "contrat",
+    label: "Contrato de Arrendamiento",
   },
   {
     value: "Documento 3",
@@ -128,8 +128,8 @@ export const MONTHLY_DOCS_OPTIONS = [
 ];
 
 export const GEN_DOCS_DICTIONARY = {
-  "Documento 1": 1,
-  "Documento 2": 2,
+  lessorId: 1,
+  contrat: 2,
   "Documento 3": 3,
   "Documento 4": 4,
   "Documento 5": 5,
@@ -146,6 +146,11 @@ export const GEN_DOCS_DICTIONARY = {
   "Doc Arrendador 4": 16,
   "Doc Arrendador 5": 17,
   "Doc Arrendador 6": 18,
+};
+
+export const GEN_DOCS_MAP = {
+  lessorId: "Identificación Arrendatario",
+  contrat: "Contrato de Arrendamiento",
 };
 
 export const MONTHS_DICTIONARY = {

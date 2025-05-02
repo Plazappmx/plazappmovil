@@ -1,7 +1,5 @@
 import {
   addDoc,
-  arrayRemove,
-  arrayUnion,
   collection,
   deleteDoc,
   doc,
@@ -11,13 +9,13 @@ import {
   query,
   serverTimestamp,
   setDoc,
-  updateDoc,
   where,
 } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { generateDocFileData, storage } from "./fileServices";
 import { deleteObject, ref } from "firebase/storage";
 import { GEN_DOCS_DICTIONARY, MONTHS_DICTIONARY } from "../utils/consts";
+import { getOneUser } from "./userServices";
 
 export const uploadDocument = async ({ userId, file, docName, docType }) => {
   try {
@@ -30,6 +28,7 @@ export const uploadDocument = async ({ userId, file, docName, docType }) => {
       docType === "general" || docType === "lessor"
         ? GEN_DOCS_DICTIONARY[docName]
         : MONTHS_DICTIONARY[docName];
+
     if (!docIndex)
       throw new Error("No fue posible generar el index del subdocumento");
 
@@ -81,6 +80,8 @@ export const uploadDocument = async ({ userId, file, docName, docType }) => {
     );
 
     console.log(`Subdocumento creado con ID: ${docId}`);
+
+    await sendDocNotification(userId, docType, docName);
   } catch (error) {
     console.error("Error creating or updating document:", error);
   }
@@ -94,7 +95,7 @@ export const getDocumentsByUserAndSubcollection = async (userId, docType) => {
     const querySnapshot = await getDocs(q);
 
     if (querySnapshot.empty) {
-      console.error(
+      console.log(
         `No se encontró ningún documento para el usuario con ID: ${userId}`
       );
       return { docs: [], allowDeleteDocs: [] };
@@ -270,5 +271,35 @@ export const analyzeDocument = async (base64) => {
     console.log("El documento no contiene la información solicitada");
   } catch (error) {
     console.error("❌ Error al analizar el documento:", error);
+  }
+};
+
+export const sendDocNotification = async (userId, docType, docName) => {
+  try {
+    const user = await getOneUser(userId);
+    const { name: userDisplayName, adminId } = user ?? {};
+
+    const admin = await getOneUser(adminId);
+    const { email: adminEmail } = admin ?? {};
+
+    const res = await fetch(process.env.EXPO_PUBLIC_DOC_NOTIFICATION_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userDisplayName,
+        adminEmail,
+        docType,
+        docName,
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      console.log("No se pudo enviar la notificación");
+    }
+    console.log(data.message);
+  } catch (error) {
+    console.error("Error al enviar la notificación:", error);
   }
 };

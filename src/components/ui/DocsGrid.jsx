@@ -1,8 +1,9 @@
 import { FlatList, Linking, StyleSheet, Text, View } from "react-native";
 import { IconButton } from "react-native-paper";
 import { deleteDocumentAndFile } from "../../services/documentServices";
+import { GEN_DOCS_MAP } from "../../utils/consts";
 
-const DocsGrid = ({ userId, docs, docType, getDocs }) => {
+const DocsGrid = ({ userId, docs, docType, allowDelete, getDocs }) => {
   const handleDeleteDoc = async (docId) => {
     await deleteDocumentAndFile({ userId, docType, docId });
     await getDocs();
@@ -15,7 +16,9 @@ const DocsGrid = ({ userId, docs, docType, getDocs }) => {
       data={docs}
       renderItem={({ item }) => (
         <View style={styles.gridItem}>
-          <Text style={styles.gridItemLabel}>{item?.docName}</Text>
+          <Text style={styles.gridItemLabel}>
+            {GEN_DOCS_MAP[item?.docName]}
+          </Text>
           <View style={styles.buttons}>
             <IconButton
               mode="contained"
@@ -30,7 +33,7 @@ const DocsGrid = ({ userId, docs, docType, getDocs }) => {
               iconColor="#fff"
               icon="delete"
               onPress={() => handleDeleteDoc(item.id)}
-              disabled={docType === "lessor"}
+              disabled={!allowDelete}
             />
           </View>
         </View>

@@ -15,7 +15,14 @@ import {
 } from "../../services/documentServices";
 import { addContactInfo } from "../../services/userServices";
 
-const FormDoc = ({ photo, setPhoto, userId, getDocs, hideModal, openCamera }) => {
+const FormDoc = ({
+  photo,
+  setPhoto,
+  userId,
+  getDocs,
+  hideModal,
+  openCamera,
+}) => {
   const [docType, setDocType] = useState("");
   const [docName, setDocName] = useState("");
   const [file, setFile] = useState(null);
@@ -23,9 +30,9 @@ const FormDoc = ({ photo, setPhoto, userId, getDocs, hideModal, openCamera }) =>
 
   useEffect(() => {
     if (photo) {
-      setFile(null)
+      setFile(null);
     }
-  }, [photo])
+  }, [photo]);
 
   const INPUT_DOCS_FIELDS = [
     {
@@ -55,7 +62,7 @@ const FormDoc = ({ photo, setPhoto, userId, getDocs, hideModal, openCamera }) =>
       }
 
       setFile(result.assets[0]);
-      setPhoto(null)
+      setPhoto(null);
     } catch (error) {
       console.error("Error seleccionando documento:", error);
     }
@@ -84,9 +91,9 @@ const FormDoc = ({ photo, setPhoto, userId, getDocs, hideModal, openCamera }) =>
       };
 
       const { data } = (await analyzeDocument(photo?.base64)) ?? {};
-      if (docName === "Documento 1") {
+      if (docName === "lessorId") {
         if (!data?.curp) {
-          return Alert.alert("No fue posible extraer el CURP", "", [
+          return Alert.alert("Atención", "No fue posible extraer el CURP", [
             {
               text: "Aceptar",
             },
@@ -111,11 +118,14 @@ const FormDoc = ({ photo, setPhoto, userId, getDocs, hideModal, openCamera }) =>
       await getDocs();
       hideModal();
 
-      if (docName === "Documento 1") {
-        await addContactInfo({ 
-          CURP: data?.curp, 
-          // name: data?.names
-        }, userId);
+      if (docName === "lessorId") {
+        await addContactInfo(
+          {
+            CURP: data?.curp,
+            // name: data?.names
+          },
+          userId
+        );
       }
     } catch (error) {
       console.error(error.message);
@@ -124,9 +134,7 @@ const FormDoc = ({ photo, setPhoto, userId, getDocs, hideModal, openCamera }) =>
     }
   };
 
-  const onSubmit = photo
-    ? submitPhoto
-    : submitUploadedDoc;
+  const onSubmit = photo ? submitPhoto : submitUploadedDoc;
 
   const btnDisabled = photo
     ? Boolean(!photo?.uri || !docType || !docName)
@@ -207,7 +215,7 @@ const FormDoc = ({ photo, setPhoto, userId, getDocs, hideModal, openCamera }) =>
       </View>
 
       <CustomButton
-        label={isLoading ? "Enviando ..." :"Enviar"}
+        label={isLoading ? "Enviando ..." : "Enviar"}
         onPress={isLoading ? () => null : onSubmit}
         disabled={btnDisabled}
       />
